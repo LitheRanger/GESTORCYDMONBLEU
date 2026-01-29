@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard | Gestor{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <!-- ================== PENDIENTES ================== -->
+    <div class="col-md-4">
+        <div class="kanban-column shadow-sm">
+            <div class="kanban-header bg-warning text-dark">
+                🟡 Pendientes
+            </div>
+
+            {% for s in pendientes %}
+            <div class="card card-solicitud shadow-sm">
+                <div class="card-body">
+
+                    <h6 class="card-title">
+                        {{ s.tipo|capitalize }} · Pedido #{{ s.pedido_id }}
+                    </h6>
+
+                    <p class="mb-1">
+                        <strong>Cliente:</strong> {{ s.cliente_nombre }}
+                    </p>
+                    <p class="mb-1">
+                        <strong>Email:</strong> {{ s.cliente_email }}
+                    </p>
+                    <p class="mb-2">
+                        <strong>Razón:</strong><br>
+                        {{ s.razon }}
+                    </p>
+
+                    <!-- PRODUCTOS -->
+                    {% if s.raw_data and s.raw_data.items %}
+                        <div class="mb-2">
+                            {% for item in s.raw_data.items %}
+                                <div class="d-flex mb-2 border rounded p-2">
+                                    {% if item.imagen_url %}
+                                    <img
+                                        src="{{ item.imagen_url }}"
+                                        width="60"
+                                        class="me-2 rounded"
+                                    >
+                                    {% endif %}
+                                    <div>
+                                        <div><strong>{{ item.producto }}</strong></div>
+                                        <div>Talla: {{ item.talla_original }} → {{ item.talla_cambio }}</div>
+                                        <div>Cantidad: {{ item.cantidad }}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- ACCIONES -->
+                    <form method="POST" action="{{ url_for('aprobar_solicitud', id=s.id) }}" class="mb-1">
+                        <input type="hidden" name="nota" value="Aprobado desde el gestor">
+                        <button class="btn btn-success btn-sm w-100">
+                            ✅ Aprobar
+                        </button>
+                    </form>
+
+                    <form method="POST" action="{{ url_for('rechazar_solicitud', id=s.id) }}">
+                        <input type="hidden" name="nota" value="Rechazado desde el gestor">
+                        <button class="btn btn-danger btn-sm w-100">
+                            ❌ Rechazar
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            {% else %}
+                <p class="text-center text-muted">Sin solicitudes</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ================== APROBADAS ================== -->
+    <div class="col-md-4">
+        <div class="kanban-column shadow-sm">
+            <div class="kanban-header bg-success text-white">
+                🟢 Aprobadas
+            </div>
+
+            {% for s in aprobadas %}
+            <div class="card card-solicitud border-success">
+                <div class="card-body">
+                    <strong>Pedido #{{ s.pedido_id }}</strong><br>
+                    {{ s.cliente_nombre }}
+                </div>
+            </div>
+            {% else %}
+                <p class="text-center text-muted">Sin solicitudes</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ================== RECHAZADAS ================== -->
+    <div class="col-md-4">
+        <div class="kanban-column shadow-sm">
+            <div class="kanban-header bg-danger text-white">
+                🔴 Rechazadas
+            </div>
+
+            {% for s in rechazadas %}
+            <div class="card card-solicitud border-danger">
+                <div class="card-body">
+                    <strong>Pedido #{{ s.pedido_id }}</strong><br>
+                    {{ s.cliente_nombre }}
+                </div>
+            </div>
+            {% else %}
+                <p class="text-center text-muted">Sin solicitudes</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
