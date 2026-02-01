@@ -14,6 +14,8 @@ En la configuración del servicio web en Render, añade las siguientes variables
 - **SECRET_KEY** (requerido): Clave secreta para Flask (genera una clave aleatoria segura).
 - **WEBHOOK_API_KEY** (opcional): Clave para proteger webhooks entrantes.
 - **RUN_SQL_MIGRATIONS** (opcional): Si se establece en `true`, el script `start.sh` ejecutará el archivo `MIGRATION_GESTORCYDMONBLEU.sql` usando `psql` antes de iniciar la aplicación.
+- **GUNICORN_WORKERS** (opcional): Número de workers de Gunicorn (por defecto: 2). Para mayor tráfico, usa 2-4 x núcleos de CPU.
+- **GUNICORN_THREADS** (opcional): Número de threads por worker (por defecto: 2).
 
 ### Migraciones de Base de Datos
 

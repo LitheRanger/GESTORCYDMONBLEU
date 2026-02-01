@@ -16,12 +16,19 @@ if [ "${RUN_SQL_MIGRATIONS:-}" = "true" ]; then
 else
   echo "Running SQLAlchemy db.create_all() to ensure tables exist"
   python - <<'PY'
-from app import db, app
-with app.app_context():
-    db.create_all()
+import sys
+try:
+    from app import db, app
+    with app.app_context():
+        db.create_all()
     print("DB initialized (db.create_all completed).")
+except Exception as e:
+    print(f"Error initializing database: {e}", file=sys.stderr)
+    sys.exit(1)
 PY
 fi
 
 # Start gunicorn bound to $PORT
-exec gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --workers 2 --threads 2
+# Using 2 workers and 2 threads per worker for small-scale deployments
+# For higher traffic, increase workers (2-4 x CPU cores) via GUNICORN_WORKERS env var
+exec gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --workers ${GUNICORN_WORKERS:-2} --threads ${GUNICORN_THREADS:-2}
