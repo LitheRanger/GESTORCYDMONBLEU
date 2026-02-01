@@ -7,6 +7,10 @@ if [ "${RUN_SQL_MIGRATIONS:-}" = "true" ]; then
     echo "DATABASE_URL is not set. Cannot run SQL migrations."
     exit 1
   fi
+  if [ ! -f "MIGRATION_GESTORCYDMONBLEU.sql" ]; then
+    echo "Error: MIGRATION_GESTORCYDMONBLEU.sql file not found."
+    exit 1
+  fi
   echo "Running SQL migrations from MIGRATION_GESTORCYDMONBLEU.sql"
   psql "$DATABASE_URL" -f MIGRATION_GESTORCYDMONBLEU.sql
 else
