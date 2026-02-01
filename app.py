@@ -101,7 +101,7 @@ class ReturnRequest(db.Model):
     # Envío (FedEx)
     carrier = db.Column(db.String(50))  # FEDEX, UPS, etc.
     tracking_number = db.Column(db.String(50))
-    label_base64 = db.Column(db.LongText)  # PDF en base64
+    label_base64 = db.Column(db.Text)  # PDF en base64
     label_mime = db.Column(db.String(50))  # application/pdf
     label_created_at = db.Column(db.DateTime)
     
@@ -145,7 +145,7 @@ class ReturnRequestHistorial(db.Model):
     accion = db.Column(db.String(50))  # aprobado, rechazado, pago_recibido, guia_generada
     usuario = db.Column(db.String(50))
     nota = db.Column(db.Text)
-    metadata = db.Column(db.JSON)  # datos adicionales (ej: tracking_number, label_url)
+    metadata_json = db.Column(db.JSON)  # datos adicionales (ej: tracking_number, label_url)
     fecha = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
 
@@ -215,7 +215,7 @@ def aprobar_solicitud(id):
             accion='aprobado',
             usuario=session.get('usuario'),
             nota=request.form.get('nota', 'Aprobado'),
-            metadata={'monto': float(s.amount) if s.amount else 0}
+            metadata_json={'monto': float(s.amount) if s.amount else 0}
         )
     )
 
@@ -238,7 +238,7 @@ def rechazar_solicitud(id):
             accion='rechazado',
             usuario=session.get('usuario'),
             nota=request.form.get('nota', 'Rechazado'),
-            metadata={}
+            metadata_json={}
         )
     )
 
@@ -328,7 +328,7 @@ def webhook_return_requests():
                 accion=accion,
                 usuario='sistema',
                 nota=f"Webhook desde CYDMONBLEU",
-                metadata={
+                metadata_json={
                     'payment_status': data.get('payment_status'),
                     'tracking_number': data.get('tracking_number')
                 }
@@ -391,7 +391,7 @@ def api_historial(id):
                 'accion': h.accion,
                 'usuario': h.usuario,
                 'nota': h.nota,
-                'metadata': h.metadata,
+                'metadata': h.metadata_json,  # Keep 'metadata' key for API compatibility
                 'fecha': h.fecha.isoformat()
             }
             for h in historial
