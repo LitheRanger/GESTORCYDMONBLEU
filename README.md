@@ -150,8 +150,10 @@ export WEBHOOK_API_KEY='webhook-demo-key'
 # Inicializar base de datos
 python -c "from app import db, app; app.app_context().push(); db.create_all()"
 
-# Crear usuarios
-python -c "from app import app; import urllib.request; urllib.request.urlopen('http://localhost:5000/crear-usuarios')"
+# Crear usuarios de prueba (ejecutar después de iniciar la app)
+# Opción 1: Acceder a http://localhost:5000/crear-usuarios en el navegador
+# Opción 2: Usar curl
+curl http://localhost:5000/crear-usuarios
 ```
 
 ### Ejecutar en Desarrollo
@@ -186,4 +188,4 @@ bash start.sh
 
 ## Soporte
 
-Para problemas o preguntas, abrir un issue en el repositorio de GitHub. 
+Para problemas o preguntas, abrir un issue en el [repositorio de GitHub](https://github.com/LitheRanger/GESTORCYDMONBLEU). 
