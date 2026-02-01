@@ -391,7 +391,7 @@ def api_historial(id):
                 'accion': h.accion,
                 'usuario': h.usuario,
                 'nota': h.nota,
-                'metadata': h.metadata_json,
+                'metadata': h.metadata_json,  # Keep 'metadata' key for API compatibility
                 'fecha': h.fecha.isoformat()
             }
             for h in historial
