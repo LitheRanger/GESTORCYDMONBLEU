@@ -15,7 +15,7 @@ else
 from app import db, app
 with app.app_context():
     db.create_all()
-print("DB initialized (db.create_all completed).")
+    print("DB initialized (db.create_all completed).")
 PY
 fi
 
