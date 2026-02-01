@@ -25,5 +25,6 @@ fi
 # Iniciar gunicorn (bind a $PORT)
 # WORKERS: número de workers (default: 2, recomendado: 2 * CPU_CORES + 1)
 # THREADS: threads por worker (default: 2, recomendado: 2-4)
+# Nota: Binding a 0.0.0.0 es correcto para Render, ya que el tráfico se enruta a través de su infraestructura
 echo "Starting gunicorn..."
 exec gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --workers ${WORKERS:-2} --threads ${THREADS:-2}

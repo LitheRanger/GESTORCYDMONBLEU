@@ -81,12 +81,12 @@ python -c "from app import db, app; with app.app_context(): db.create_all()"
 ### Ejecutar localmente
 ```bash
 # Opción 1: Usando Flask development server
-export SECRET_KEY=dev-secret-key
+export SECRET_KEY=dev-secret-key  # ⚠️ SOLO para desarrollo local, nunca usar en producción
 export DATABASE_URL=postgresql://user:password@localhost/dbname
 flask run
 
 # Opción 2: Usando el script de arranque (simula producción)
-export SECRET_KEY=dev-secret-key
+export SECRET_KEY=dev-secret-key  # ⚠️ SOLO para desarrollo local, nunca usar en producción
 export DATABASE_URL=postgresql://user:password@localhost/dbname
 export PORT=8000
 bash start.sh
