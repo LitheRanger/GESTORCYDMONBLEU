@@ -102,8 +102,7 @@ with app.app_context(): \
     db.create_all(); \
     print('Base de datos inicializada')"
 
-# O con migraciones SQL
-export RUN_SQL_MIGRATIONS=true
+# O con migraciones SQL directamente
 psql "$DATABASE_URL" -f MIGRATION_GESTORCYDMONBLEU.sql
 ```
 
