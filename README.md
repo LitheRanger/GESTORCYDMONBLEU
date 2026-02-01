@@ -35,10 +35,12 @@ En la sección **Environment** del servicio, añadir las siguientes variables:
 
 **Variables obligatorias:**
 - `DATABASE_URL`: La Internal Database URL de tu PostgreSQL (ej: `postgresql://user:pass@host/db`)
-- `SECRET_KEY`: Una clave secreta segura para Flask sessions (ej: generar con `python -c "import secrets; print(secrets.token_hex(32))"`)
+- `SECRET_KEY`: Una clave secreta segura y única para Flask sessions. **IMPORTANTE**: Debe ser única por entorno y nunca debe estar en control de versiones. Generar con `python -c "import secrets; print(secrets.token_hex(32))"`. Usar una clave débil o compartida compromete la seguridad de las sesiones.
 
 **Variables opcionales:**
 - `WEBHOOK_API_KEY`: Clave para proteger webhooks (genera una si necesitas webhooks)
+- `WORKERS`: Número de workers de gunicorn (default: 2, recomendado: `2 * CPU_CORES + 1`)
+- `THREADS`: Número de threads por worker (default: 2, recomendado: 2-4)
 - Cualquier otra variable que necesite tu aplicación
 
 #### 4. Desplegar
@@ -95,5 +97,4 @@ bash start.sh
 - **Base de datos**: PostgreSQL con SQLAlchemy
 - **Servidor**: Gunicorn
 - **Pagos**: Stripe
-- **Envíos**: FedEx
- 
+- **Envíos**: FedEx 
